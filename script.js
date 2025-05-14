@@ -15,13 +15,53 @@ document.addEventListener('DOMContentLoaded', function() {
     // Анимирани преходи между секциите
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Вземаме ID на целевата секция от href атрибута
             const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
             
-            if (targetSection) {
+            // Проверяваме дали линкът сочи към секция в текущата страница
+            if (targetId.startsWith('#') && targetId.length > 1) {
+                e.preventDefault();
+                
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    // Създаваме overlay елемент за анимацията
+                    const overlay = document.createElement('div');
+                    overlay.className = 'page-transition-overlay';
+                    document.body.appendChild(overlay);
+                    
+                    // Анимираме overlay елемента
+                    setTimeout(() => {
+                        overlay.classList.add('active');
+                    }, 50);
+                    
+                    // След като анимацията приключи, превъртаме до целевата секция и премахваме overlay
+                    setTimeout(() => {
+                        // Скролваме до целевата секция
+                        targetSection.scrollIntoView({
+                            behavior: 'auto'
+                        });
+                        
+                        // Добавяме анимация за появата на секцията
+                        targetSection.classList.add('section-animate');
+                        
+                        // Премахваме overlay след като скролнем
+                        setTimeout(() => {
+                            overlay.classList.remove('active');
+                            setTimeout(() => {
+                                document.body.removeChild(overlay);
+                            }, 500);
+                        }, 300);
+                        
+                        // Затваряне на мобилното меню ако е на малък екран
+                        if (window.innerWidth <= 768 && menu) {
+                            menu.classList.remove('active');
+                        }
+                    }, 500);
+                }
+            } else {
+                // Ако линкът сочи към друга страница, прилагаме анимация преди преход
+                e.preventDefault();
+                
                 // Създаваме overlay елемент за анимацията
                 const overlay = document.createElement('div');
                 overlay.className = 'page-transition-overlay';
@@ -32,29 +72,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     overlay.classList.add('active');
                 }, 50);
                 
-                // След като анимацията приключи, превъртаме до целевата секция и премахваме overlay
+                // След като анимацията приключи, преминаваме към целевата страница
                 setTimeout(() => {
-                    // Скролваме до целевата секция
-                    targetSection.scrollIntoView({
-                        behavior: 'auto'
-                    });
-                    
-                    // Добавяме анимация за появата на секцията
-                    targetSection.classList.add('section-animate');
-                    
-                    // Премахваме overlay след като скролнем
-                    setTimeout(() => {
-                        overlay.classList.remove('active');
-                        setTimeout(() => {
-                            document.body.removeChild(overlay);
-                        }, 500);
-                    }, 300);
-                    
-                    // Затваряне на мобилното меню ако е на малък екран
-                    if (window.innerWidth <= 768 && menu) {
-                        menu.classList.remove('active');
-                    }
+                    window.location.href = targetId;
                 }, 500);
+                
+                // Затваряне на мобилното меню ако е на малък екран
+                if (window.innerWidth <= 768 && menu) {
+                    menu.classList.remove('active');
+                }
             }
         });
     });
