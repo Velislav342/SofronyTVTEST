@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Софрони ТВ - Админ панел</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animations.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .admin-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .admin-section {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .admin-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .admin-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        
+        .admin-tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"], textarea, input[type="date"], input[type="url"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .news-list, .weather-list {
+            margin-top: 20px;
+        }
+        
+        .news-item, .weather-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        .edit-btn {
+            position: absolute;
+            top: 10px;
+            right: 80px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-section" class="login-container">
+        <h2>Вход в администраторския панел</h2>
+        <div class="form-group">
+            <label for="username">Потребителско име:</label>
+            <input type="text" id="username" name="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Парола:</label>
+            <input type="password" id="password" name="password">
+        </div>
+        <button id="login-btn">Вход</button>
+        <p id="login-error" style="color: red; display: none;">Грешно потребителско име или парола!</p>
+    </div>
+
+    <div id="admin-panel" style="display: none;">
+        <header>
+            <div class="top-bar">
+                <div class="logo">
+                    <a href="index.html"><img src="https://sofronytv.eu/background.png" alt="Софрони ТВ Лого"></a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Начало</a></li>
+                        <li><a href="about.html">За нас</a></li>
+                        <li><a href="news.html">Новини</a></li>
+                        <li><a href="weather.html">Времето</a></li>
+                        <li><a href="holiday.html">Празници</a></li>
+                        <li><a href="team.html">Екип</a></li>
+                        <li><a href="contact.html">Контакти</a></li>
+                        <li><a href="#" class="active">Админ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>Админ панел</h1>
+                <p>Управлявайте съдържанието на вашия сайт</p>
+                <button id="logout-btn">Изход</button>
+            </div>
+
+            <div class="admin-section">
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="news">Новини</button>
+                    <button class="admin-tab" data-tab="weather">Времето</button>
+                    <button class="admin-tab" data-tab="holiday">Празници</button>
+                    <button class="admin-tab" data-tab="team">Екип</button>
+                </div>
+
+                <!-- Новини -->
+                <div id="news-tab" class="tab-content active">
+                    <h2>Управление на новини</h2>
+                    <form id="news-form">
+                        <div class="form-group">
+                            <label for="news-title">Заглавие:</label>
+                            <input type="text" id="news-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="news-date">Дата:</label>
+                            <input type="date" id="news-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="news-image">URL на снимка:</label>
+                            <input type="url" id="news-image" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <div class="form-group">
+                            <label for="news-content">Съдържание:</label>
+                            <textarea id="news-content" rows="6" required></textarea>
+                        </div>
+                        <button type="submit" id="save-news">Запази новина</button>
+                    </form>
+                    <div class="news-list">
+                        <h3>Списък с новини</h3>
+                        <div id="news-items"></div>
+                    </div>
+                </div>
+
+                <!-- Времето -->
+                <div id="weather-tab" class="tab-content">
+                    <h2>Управление на времето</h2>
+                    <form id="weather-form">
+                        <div class="form-group">
+                            <label for="weather-date">Дата:</label>
+                            <input type="date" id="weather-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="weather-temp">Температура (°C):</label>
+                            <input type="text" id="weather-temp" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="weather-condition">Състояние:</label>
+                            <input type="text" id="weather-condition" placeholder="Слънчево, Облачно, Дъждовно..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="weather-icon">URL на иконка:</label>
+                            <input type="url" id="weather-icon" placeholder="https://example.com/sun.png">
+                        </div>
+                        <button type="submit" id="save-weather">Запази прогноза</button>
+                    </form>
+                    <div class="weather-list">
+                        <h3>Списък с прогнози</h3>
+                        <div id="weather-items"></div>
+                    </div>
+                </div>
+
+                <!-- Празници -->
+                <div id="holiday-tab" class="tab-content">
+                    <h2>Управление на празници</h2>
+                    <form id="holiday-form">
+                        <div class="form-group">
+                            <label for="holiday-name">Име на празника:</label>
+                            <input type="text" id="holiday-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="holiday-date">Дата:</label>
+                            <input type="date" id="holiday-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="holiday-description">Описание:</label>
+                            <textarea id="holiday-description" rows="6" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="holiday-image">URL на снимка:</label>
+                            <input type="url" id="holiday-image" placeholder="https://example.com/holiday.jpg">
+                        </div>
+                        <button type="submit" id="save-holiday">Запази празник</button>
+                    </form>
+                    <div class="holiday-list">
+                        <h3>Списък с празници</h3>
+                        <div id="holiday-items"></div>
+                    </div>
+                </div>
+
+                <!-- Екип -->
+                <div id="team-tab" class="tab-content">
+                    <h2>Управление на екипа</h2>
+                    <form id="team-form">
+                        <div class="form-group">
+                            <label for="team-name">Име:</label>
+                            <input type="text" id="team-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-position">Позиция:</label>
+                            <input type="text" id="team-position" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-bio">Биография:</label>
+                            <textarea id="team-bio" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-image">URL на снимка:</label>
+                            <input type="url" id="team-image" placeholder="https://example.com/photo.jpg">
+                        </div>
+                        <button type="submit" id="save-team">Запази член на екипа</button>
+                    </form>
+                    <div class="team-list">
+                        <h3>Списък с членове на екипа</h3>
+                        <div id="team-items"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Конфигуриране на функционалността на админ панела
+        document.addEventListener('DOMContentLoaded', function() {
+            // Информация за вход
+            const adminCredentials = {
+                username: 'admin',
+                password: 'sofronitv2025'
+            };
+
+            // Референции към DOM елементи
+            const loginSection = document.getElementById('login-section');
+            const adminPanel = document.getElementById('admin-panel');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const loginError = document.getElementById('login-error');
+
+            // Табове
+            const tabs = document.querySelectorAll('.admin-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Форми за различните секции
+            const newsForm = document.getElementById('news-form');
+            const weatherForm = document.getElementById('weather-form');
+            const holidayForm = document.getElementById('holiday-form');
+            const teamForm = document.getElementById('team-form');
+
+            // Контейнери за списъци
+            const newsItems = document.getElementById('news-items');
+            const weatherItems = document.getElementById('weather-items');
+            const holidayItems = document.getElementById('holiday-items');
+            const teamItems = document.getElementById('team-items');
+
+            // Функция за проверка дали потребителят е влязъл
+            function checkLoggedIn() {
+                if (localStorage.getItem('adminLoggedIn') === 'true') {
+                    loginSection.style.display = 'none';
+                    adminPanel.style.display = 'block';
+                } else {
+                    loginSection.style.display = 'block';
+                    adminPanel.style.display = 'none';
+                }
+            }
+
+            // Проверяваме при зареждане на страницата
+            checkLoggedIn();
+
+            // Вход в системата
+            loginBtn.addEventListener('click', function() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                if (username === adminCredentials.username && password === adminCredentials.password) {
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    loginSection.style.display = 'none';
+                    adminPanel.style.display = 'block';
+                    loginError.style.display = 'none';
+                } else {
+                    loginError.style.display = 'block';
+                }
+            });
+
+            // Изход от системата
+            logoutBtn.addEventListener('click', function() {
+                localStorage.removeItem('adminLoggedIn');
+                loginSection.style.display = 'block';
+                adminPanel.style.display = 'none';
+            });
+
+            // Превключване между табовете
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Премахваме активния клас от всички табове
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Добавяме активен клас на текущия таб
+                    this.classList.add('active');
+                    
+                    // Скриваме всички таб съдържания
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Показваме съдържанието на текущия таб
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                    
+                    // Зареждаме данните за текущия таб
+                    loadItems(tabId);
+                });
+            });
+
+            // Функция за зареждане на елементите за всеки таб
+            function loadItems(tabType) {
+                const items = JSON.parse(localStorage.getItem(tabType + 'Items') || '[]');
+                const container = document.getElementById(tabType + '-items');
+                container.innerHTML = '';
+                
+                if (items.length === 0) {
+                    container.innerHTML = '<p>Няма добавени елементи.</p>';
+                    return;
+                }
+                
+                items.forEach((item, index) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = tabType + '-item';
+                    
+                    // Различно съдържание според типа на таба
+                    if (tabType === 'news') {
+                        itemElement.innerHTML = `
+                            <h4>${item.title}</h4>
+                            <p><strong>Дата:</strong> ${item.date}</p>
+                            <p>${item.content.substring(0, 100)}...</p>
+                            <button class="edit-btn" data-index="${index}">Редактирай</button>
+                            <button class="delete-btn" data-index="${index}">Изтрий</button>
+                        `;
+                    } else if (tabType === 'weather') {
+                        itemElement.innerHTML = `
+                            <h4>${item.date}</h4>
+                            <p><strong>Температура:</strong> ${item.temp}°C</p>
+                            <p><strong>Състояние:</strong> ${item.condition}</p>
+                            <button class="edit-btn" data-index="${index}">Редактирай</button>
+                            <button class="delete-btn" data-index="${index}">Изтрий</button>
+                        `;
+                    } else if (tabType === 'holiday') {
+                        itemElement.innerHTML = `
+                            <h4>${item.name}</h4>
+                            <p><strong>Дата:</strong> ${item.date}</p>
+                            <p>${item.description.substring(0, 100)}...</p>
+                            <button class="edit-btn" data-index="${index}">Редактирай</button>
+                            <button class="delete-btn" data-index="${index}">Изтрий</button>
+                        `;
+                    } else if (tabType === 'team') {
+                        itemElement.innerHTML = `
+                            <h4>${item.name}</h4>
+                            <p><strong>Позиция:</strong> ${item.position}</p>
+                            <button class="edit-btn" data-index="${index}">Редактирай</button>
+                            <button class="delete-btn" data-index="${index}">Изтрий</button>
+                        `;
+                    }
+                    
+                    container.appendChild(itemElement);
+                });
+                
+                // Добавяме слушатели за бутоните за изтриване
+                const deleteButtons = container.querySelectorAll('.delete-btn');
+                deleteButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        deleteItem(tabType, index);
+                    });
+                });
+                
+                // Добавяме слушатели за бутоните за редактиране
+                const editButtons = container.querySelectorAll('.edit-btn');
+                editButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        editItem(tabType, index);
+                    });
+                });
+            }
+
+            // Функция за изтриване на елемент
+            function deleteItem(tabType, index) {
+                if (confirm('Сигурни ли сте, че искате да изтриете този елемент?')) {
+                    const items = JSON.parse(localStorage.getItem(tabType + 'Items') || '[]');
+                    items.splice(index, 1);
+                    localStorage.setItem(tabType + 'Items', JSON.stringify(items));
+                    loadItems(tabType);
+                }
+            }
+
+            // Функция за редактиране на елемент
+            function editItem(tabType, index) {
+                const items = JSON.parse(localStorage.getItem(tabType + 'Items') || '[]');
+                const item = items[index];
+                
+                if (tabType === 'news') {
+                    document.getElementById('news-title').value = item.title;
+                    document.getElementById('news-date').value = item.date;
+                    document.getElementById('news-image').value = item.image || '';
+                    document.getElementById('news-content').value = item.content;
+                } else if (tabType === 'weather') {
+                    document.getElementById('weather-date').value = item.date;
+                    document.getElementById('weather-temp').value = item.temp;
+                    document.getElementById('weather-condition').value = item.condition;
+                    document.getElementById('weather-icon').value = item.icon || '';
+                } else if (tabType === 'holiday') {
+                    document.getElementById('holiday-name').value = item.name;
+                    document.getElementById('holiday-date').value = item.date;
+                    document.getElementById('holiday-description').value = item.description;
+                    document.getElementById('holiday-image').value = item.image || '';
+                } else if (tabType === 'team') {
+                    document.getElementById('team-name').value = item.name;
+                    document.getElementById('team-position').value = item.position;
+                    document.getElementById('team-bio').value = item.bio || '';
+                    document.getElementById('team-image').value = item.image || '';
+                }
+                
+                // Модифицираме съответната форма, за да актуализира вместо да създава нов елемент
+                const form = document.getElementById(tabType + '-form');
+                form.setAttribute('data-edit-index', index);
+                
+                // Променяме текста на бутона
+                const saveButton = document.getElementById('save-' + tabType);
+                saveButton.textContent = 'Обнови';
+            }
+
+            // Обработване на формуляра за новини
+            newsForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('news-title').value;
+                const date = document.getElementById('news-date').value;
+                const image = document.getElementById('news-image').value;
+                const content = document.getElementById('news-content').value;
+                
+                const newsItem = {
+                    title: title,
+                    date: date,
+                    image: image,
+                    content: content
+                };
+                
+                let newsItems = JSON.parse(localStorage.getItem('newsItems') || '[]');
+                
+                // Проверяваме дали редактираме съществуващ елемент
+                const editIndex = this.getAttribute('data-edit-index');
+                if (editIndex !== null && editIndex !== undefined) {
+                    newsItems[editIndex] = newsItem;
+                    this.removeAttribute('data-edit-index');
+                    document.getElementById('save-news').textContent = 'Запази новина';
+                } else {
+                    newsItems.push(newsItem);
+                }
+                
+                localStorage.setItem('newsItems', JSON.stringify(newsItems));
+                this.reset();
+                loadItems('news');
+            });
+
+            // Обработване на формуляра за времето
+            weatherForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const date = document.getElementById('weather-date').value;
+                const temp = document.getElementById('weather-temp').value;
+                const condition = document.getElementById('weather-condition').value;
+                const icon = document.getElementById('weather-icon').value;
+                
+                const weatherItem = {
+                    date: date,
+                    temp: temp,
+                    condition: condition,
+                    icon: icon
+                };
+                
+                let weatherItems = JSON.parse(localStorage.getItem('weatherItems') || '[]');
+                
+                // Проверяваме дали редактираме съществуващ елемент
+                const editIndex = this.getAttribute('data-edit-index');
+                if (editIndex !== null && editIndex !== undefined) {
+                    weatherItems[editIndex] = weatherItem;
+                    this.removeAttribute('data-edit-index');
+                    document.getElementById('save-weather').textContent = 'Запази прогноза';
+                } else {
+                    weatherItems.push(weatherItem);
+                }
+                
+                localStorage.setItem('weatherItems', JSON.stringify(weatherItems));
+                this.reset();
+                loadItems('weather');
+            });
+
+            // Обработване на формуляра за празници
+            holidayForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('holiday-name').value;
+                const date = document.getElementById('holiday-date').value;
+                const description = document.getElementById('holiday-description').value;
+                const image = document.getElementById('holiday-image').value;
+                
+                const holidayItem = {
+                    name: name,
+                    date: date,
+                    description: description,
+                    image: image
+                };
+                
+                let holidayItems = JSON.parse(localStorage.getItem('holidayItems') || '[]');
+                
+                // Проверяваме дали редактираме съществуващ елемент
+                const editIndex = this.getAttribute('data-edit-index');
+                if (editIndex !== null && editIndex !== undefined) {
+                    holidayItems[editIndex] = holidayItem;
+                    this.removeAttribute('data-edit-index');
+                    document.getElementById('save-holiday').textContent = 'Запази празник';
+                } else {
+                    holidayItems.push(holidayItem);
+                }
+                
+                localStorage.setItem('holidayItems', JSON.stringify(holidayItems));
+                this.reset();
+                loadItems('holiday');
+            });
+
+            // Обработване на формуляра за екипа
+            teamForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('team-name').value;
+                const position = document.getElementById('team-position').value;
+                const bio = document.getElementById('team-bio').value;
+                const image = document.getElementById('team-image').value;
+                
+                const teamItem = {
+                    name: name,
+                    position: position,
+                    bio: bio,
+                    image: image
+                };
+                
+                let teamItems = JSON.parse(localStorage.getItem('teamItems') || '[]');
+                
+                // Проверяваме дали редактираме съществуващ елемент
+                const editIndex = this.getAttribute('data-edit-index');
+                if (editIndex !== null && editIndex !== undefined) {
+                    teamItems[editIndex] = teamItem;
+                    this.removeAttribute('data-edit-index');
+                    document.getElementById('save-team').textContent = 'Запази член на екипа';
+                } else {
+                    teamItems.push(teamItem);
+                }
+                
+                localStorage.setItem('teamItems', JSON.stringify(teamItems));
+                this.reset();
+                loadItems('team');
+            });
+
+            // Зареждаме първоначално данните за активния таб
+            loadItems('news');
+        });
+    </script>
+</body>
+</html>
