@@ -1,0 +1,250 @@
+/* Допълнителни стилове за админ панела и интеграцията */
+
+/* Общи стилове за контейнерите на съдържанието */
+.news-container,
+.weather-container, 
+.holiday-container,
+.team-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* Стилове за новини */
+.news-item {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.news-item:hover {
+    transform: translateY(-5px);
+}
+
+.news-date {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.news-title h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.news-image {
+    margin: 15px 0;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.news-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.news-image img:hover {
+    transform: scale(1.03);
+}
+
+.news-content {
+    line-height: 1.6;
+}
+
+/* Стилове за времето */
+.weather-forecast {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.weather-day {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+    transition: transform 0.3s ease;
+}
+
+.weather-day:hover {
+    transform: translateY(-5px);
+}
+
+.weather-date {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.weather-icon {
+    margin: 15px 0;
+}
+
+.weather-icon img {
+    width: 64px;
+    height: 64px;
+}
+
+.weather-temp {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.weather-condition {
+    color: #666;
+}
+
+/* Стилове за празници */
+.holiday-item {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.holiday-item:hover {
+    transform: translateY(-5px);
+}
+
+.holiday-item h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.holiday-date {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.holiday-image {
+    margin: 15px 0;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.holiday-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.holiday-image img:hover {
+    transform: scale(1.03);
+}
+
+.holiday-description {
+    line-height: 1.6;
+}
+
+/* Стилове за екипа */
+.team-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.team-member {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 300px;
+    transition: transform 0.3s ease;
+}
+
+.team-member:hover {
+    transform: translateY(-5px);
+}
+
+.member-photo {
+    height: 250px;
+    overflow: hidden;
+}
+
+.member-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.member-photo img:hover {
+    transform: scale(1.05);
+}
+
+.member-info {
+    padding: 20px;
+}
+
+.member-info h3 {
+    margin-bottom: 5px;
+}
+
+.member-position {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.member-bio {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Стилове за начална страница */
+.latest-news, .current-weather {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.latest-news h2, .current-weather h2 {
+    border-bottom: 2px solid #eee;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.news-preview {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.news-preview:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.read-more, .view-forecast {
+    color: #4CAF50;
+    display: inline-block;
+    font-weight: bold;
+    margin-top: 10px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.read-more:hover, .view-forecast:hover {
+    color: #45a049;
+    text-decoration: underline;
+}
+
+.weather-info {
+    text-align: center;
+}
